@@ -1,4 +1,5 @@
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,24 +44,53 @@ public class BlockchainExample {
 		else return false;
 	}
 	
-	//addNewBLock
-	
-	//getAllBlocks
-	
-	//sha256
-	
+	public void addNewBlock(String msg){
+		Integer in = blocks.size();
+		String previousHash = getLastHash();
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+		
+		hashBlock(msg, timeStamp, previousHash, in.toString());
+	}
 	
 
+	public void getAllBlocks() {
+		for(int i=0;i<blocks.size();i++){
+		    System.out.println(blocks.get(i));
+		} 
+	}
+	
+
+	public String sha256(String password) {
+        MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        md.update(password.getBytes());
+
+        byte byteData[] = md.digest();
+
+        //convert the byte to hex format method 1
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        
+        return sb.toString();
+	}
+	
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
-		//jak tutaj wywolac metody klasy powyzej???
+		BlockchainExample be = new BlockchainExample();
+
+		be.initBlockchain();
+		be.addNewBlock("First new block");
+		be.addNewBlock("Second new block");
 		
-		//initBlockchain
-		//addNewBLock - First new block
-		//addNewBlock - Second new block
-		
-		//getAllBlocks
+		be.getAllBlocks();
 
 	}
 
